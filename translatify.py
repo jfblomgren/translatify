@@ -114,16 +114,28 @@ CODE_TO_LANG = {
 LANG_TO_CODE = dict(map(reversed, CODE_TO_LANG.items()))
 
 
-def language(string):
-    lang = string.lower()
+def get_language_code(lang):
     if lang in CODE_TO_LANG or lang == 'auto':
         return lang
     elif lang in LANG_TO_CODE:
         return LANG_TO_CODE[lang]
+    return None
+
+def language(string):
+    lang = string.lower()
+    lang_code = get_language_code(lang)
+    if lang_code is not None:
+        return lang_code
     raise argparse.ArgumentTypeError(lang + ' is not a valid language')
 
 def language_list(string):
-    return [language(lang) for lang in string.split(',')]
+    lang_list = []
+    for lang in string.split(','):
+        if lang.lower() == 'all':
+            lang_list += list((CODE_TO_LANG.keys()))
+        else:
+            lang_list.append(get_language_code(lang))
+    return lang_list
 
 
 translator = Translator()
@@ -144,6 +156,12 @@ for i, language in enumerate(args.to_langs):
     translation = translator.translate(args.text, src=from_lang, dest=language)
     args.text = translation.text
 
-    print('[{} -> {}]'.format(CODE_TO_LANG[translation.src.lower()].title(),
-                              CODE_TO_LANG[translation.dest.lower()].title()))
+    # src and dest sometimes come back empty.
+    if len(translation.src) > 1:
+        from_lang = translation.src
+    if len(translation.dest) > 1:
+        language = translation.dest
+
+    print('[{} -> {}]'.format(CODE_TO_LANG[from_lang.lower()].title(),
+                              CODE_TO_LANG[language.lower()].title()))
     print(args.text)

@@ -144,20 +144,20 @@ translator = Translator()
 parser = argparse.ArgumentParser()
 parser.add_argument('-b', '--brief', help='only show the final result',
                     action='store_true')
-parser.add_argument('-f', '--from', metavar='LANGUAGE',
+parser.add_argument('-s', '--source', metavar='LANGUAGE',
                     help='the language of the original text (default: auto)',
-                    type=language, default='auto', dest='from_lang')
-parser.add_argument('-t', '--to', metavar='LANGUAGES',
+                    type=language, default='auto')
+parser.add_argument('-t', '--targets', metavar='LANGUAGES',
                     help='an ordered, comma-separated list of languages to '
                          'translate the text to (default: all)',
-                    type=language_list, default='all', dest='to_langs')
+                    type=language_list, default='all')
 parser.add_argument('text', metavar='TEXT', help='the text to translate',
                     type=str)
 args = parser.parse_args()
 
-for i, language in enumerate(args.to_langs):
-    from_lang = args.from_lang if i == 0 else args.to_langs[i - 1]
-    translation = translator.translate(args.text, src=from_lang, dest=language)
+for i, target in enumerate(args.targets):
+    source = args.source if i == 0 else args.targets[i - 1]
+    translation = translator.translate(args.text, src=source, dest=target)
     args.text = translation.text
 
     if args.brief:
@@ -165,12 +165,12 @@ for i, language in enumerate(args.to_langs):
 
     # src and dest sometimes come back empty.
     if len(translation.src) > 1:
-        from_lang = translation.src.lower()
+        source = translation.src.lower()
     if len(translation.dest) > 1:
-        language = translation.dest.lower()
+        target = translation.dest.lower()
 
-    print('[{} -> {}]'.format(CODE_TO_LANG[from_lang].title(),
-                              CODE_TO_LANG[language].title()))
+    print('[{} -> {}]'.format(CODE_TO_LANG[source].title(),
+                              CODE_TO_LANG[target].title()))
     print(args.text)
 
 if args.brief:

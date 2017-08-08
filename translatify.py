@@ -140,6 +140,8 @@ def language_list(string):
 
 translator = Translator()
 parser = argparse.ArgumentParser()
+parser.add_argument('-b', '--brief', help='only show the final result',
+                    action='store_true')
 parser.add_argument('-f', '--from', metavar='LANGUAGE',
                     help='the language of the original text (default: auto)',
                     type=language, default='auto', dest='from_lang')
@@ -156,12 +158,18 @@ for i, language in enumerate(args.to_langs):
     translation = translator.translate(args.text, src=from_lang, dest=language)
     args.text = translation.text
 
+    if args.brief:
+        continue
+
     # src and dest sometimes come back empty.
     if len(translation.src) > 1:
-        from_lang = translation.src
+        from_lang = translation.src.lower()
     if len(translation.dest) > 1:
-        language = translation.dest
+        language = translation.dest.lower()
 
-    print('[{} -> {}]'.format(CODE_TO_LANG[from_lang.lower()].title(),
-                              CODE_TO_LANG[language.lower()].title()))
+    print('[{} -> {}]'.format(CODE_TO_LANG[from_lang].title(),
+                              CODE_TO_LANG[language].title()))
+    print(args.text)
+
+if args.brief:
     print(args.text)

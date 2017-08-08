@@ -115,17 +115,19 @@ LANG_TO_CODE = dict(map(reversed, CODE_TO_LANG.items()))
 
 
 def get_language_code(lang):
-    if lang in CODE_TO_LANG or lang == 'auto':
+    if lang in CODE_TO_LANG:
         return lang
     elif lang in LANG_TO_CODE:
         return LANG_TO_CODE[lang]
     return None
 
-def language(string):
+def language(string, allow_auto=True):
     lang = string.lower()
     lang_code = get_language_code(lang)
     if lang_code is not None:
         return lang_code
+    elif allow_auto and lang == 'auto':
+        return lang
     raise argparse.ArgumentTypeError(lang + ' is not a valid language')
 
 def language_list(string):
@@ -134,7 +136,7 @@ def language_list(string):
         if lang.lower() == 'all':
             lang_list += sorted(CODE_TO_LANG.keys(), key=CODE_TO_LANG.get)
         else:
-            lang_list.append(get_language_code(lang))
+            lang_list.append(language(lang, allow_auto=False))
     return lang_list
 
 

@@ -147,10 +147,10 @@ parser.add_argument('-b', '--brief', help='only show the final result',
 parser.add_argument('-f', '--from', metavar='LANGUAGE',
                     help='the language of the original text (default: auto)',
                     type=language, default='auto', dest='from_lang')
-parser.add_argument('to_langs', metavar='TO',
+parser.add_argument('-t', '--to', metavar='LANGUAGES',
                     help='an ordered, comma-separated list of languages to '
-                         'translate the text to',
-                    type=language_list)
+                         'translate the text to (default: all)',
+                    type=language_list, default='all', dest='to_langs')
 parser.add_argument('text', metavar='TEXT', help='the text to translate',
                     type=str)
 args = parser.parse_args()

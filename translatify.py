@@ -58,12 +58,9 @@ for i, target in enumerate(args.targets):
     if args.brief:
         continue
 
-    # src and dest sometimes come back empty.
-    if len(translation.src) > 1:
-        source = translation.src.lower()
-    if len(translation.dest) > 1:
-        target = translation.dest.lower()
-
+    # If the original source was 'auto', the source will be automatically
+    # detected during translation.
+    source = translation.src.lower()
     print('[{} -> {}]'.format(CODE_TO_LANG[source].title(),
                               CODE_TO_LANG[target].title()))
     print(args.text)

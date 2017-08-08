@@ -132,7 +132,7 @@ def language_list(string):
     lang_list = []
     for lang in string.split(','):
         if lang.lower() == 'all':
-            lang_list += list((CODE_TO_LANG.keys()))
+            lang_list += sorted(CODE_TO_LANG.keys(), key=CODE_TO_LANG.get)
         else:
             lang_list.append(get_language_code(lang))
     return lang_list

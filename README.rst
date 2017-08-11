@@ -66,3 +66,24 @@ alphabetical order:
     Google
     [German -> English]
     Google
+
+Languages can be listed using the ``--list`` flag:
+
+.. code:: bash
+
+    $ translatify --list
+    Code   Name
+    af     Afrikaans
+    sq     Albanian
+    am     Amharic
+    ar     Arabic
+    hy     Armenian
+    az     Azerbaijani
+    eu     Basque
+    be     Belarusian
+    bn     Bengali
+    bs     Bosnian
+    bg     Bulgarian
+    ca     Catalan
+
+    [....]

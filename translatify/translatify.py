@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 import argparse
+import operator
+import sys
+
 from googletrans import Translator
 from googletrans.constants import LANGUAGES, LANGCODES
 
@@ -37,6 +40,8 @@ def language_list(string):
 def setup_parser(parser):
     parser.add_argument('-b', '--brief', help='only show the final result',
                         action='store_true')
+    parser.add_argument('-l', '--list', help='list all available languages',
+                        action='store_true')
     parser.add_argument('-s', '--source', metavar='LANGUAGE',
                         help='language of the original text (default: auto)',
                         type=language, default='auto')
@@ -45,7 +50,17 @@ def setup_parser(parser):
                              'translate the text to (default: all)',
                         type=language_list, default='all')
     parser.add_argument('text', metavar='TEXT', help='the text to translate',
-                        type=str)
+                        type=str,
+                        # This argument should only be required if '--list'
+                        # wasn't specified.
+                        nargs='*' if '-l' in sys.argv
+                                  or '--list' in sys.argv else 1)
+
+def list_languages():
+    max_code_len = len(max(CODE_TO_LANG.keys(), key=len)) + 2
+    print('{0:{1}}Name'.format('Code', max_code_len))
+    for code, name in sorted(CODE_TO_LANG.items(), key=operator.itemgetter(1)):
+       print('{0:{1}}{2}'.format(code, max_code_len, name.title()))
 
 def translatify_text(text, source, targets, show_steps):
     translator = Translator()
@@ -75,7 +90,10 @@ def main():
     setup_parser(parser)
     args = parser.parse_args()
 
-    translatify_text(args.text, args.source, args.targets, not args.brief)
+    if args.list:
+        list_languages()
+    else:
+        translatify_text(args.text[0], args.source, args.targets, not args.brief)
 
 
 if __name__ == '__main__':

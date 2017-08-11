@@ -1,10 +1,15 @@
 from setuptools import setup
 
+def get_readme():
+    with open('README.rst', encoding='UTF-8') as readme:
+        return readme.read()
+
 
 setup(name='translatify',
-      version='1.0',
+      version='1.0.1',
       description='A fun tool to convert text into different languages using '
                   'Google Translate',
+      long_description=get_readme(),
       license='MIT',
       author='Encrylize',
       author_email='encrylize@gmail.com',

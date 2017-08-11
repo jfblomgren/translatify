@@ -8,6 +8,7 @@ from googletrans import Translator
 from googletrans.constants import LANGUAGES, LANGCODES
 
 
+DESCRIPTION = 'Translate text through different languages using Google Translate.'
 CODE_TO_LANG = LANGUAGES
 LANG_TO_CODE = LANGCODES
 
@@ -86,7 +87,7 @@ def translatify_text(text, source, targets, show_steps):
         print(text)
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
     setup_parser(parser)
     args = parser.parse_args()
 
